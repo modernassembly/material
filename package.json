@@ -1,0 +1,42 @@
+{
+  "name": "material",
+  "version": "0.0.0",
+  "description": "A lightweight, front-end alternative for traditional DOM manipulation, in exchange for smooth and complex UIs.",
+  "main": "index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "example": "run-browser examples/index.html",
+    "test": "browserify test/index.js | tape-run | tap-spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/modernassembly/material.git"
+  },
+  "keywords": [
+    "material",
+    "front-end",
+    "framework",
+    "UI",
+    "CSS3"
+  ],
+  "author": "Nick Jonas",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/modernassembly/material/issues"
+  },
+  "dependencies": {
+    "console-shim": "~1.0.3",
+    "watchify": "~0.10.2",
+    "lodash": "~2.4.1"
+  },
+  "devDependencies": {
+    "browserify": "~3.41.0",
+    "tap-spec": "~0.2.0",
+    "tape": "~2.12.1",
+    "tape-run": "~0.1.1",
+    "run-browser": "~1.2.0",
+    "jquery": "~2.1.1"
+  }
+}

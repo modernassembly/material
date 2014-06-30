@@ -1,0 +1,34 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Material Example</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="../dist/material.js"></script>
+    </head>
+    <body>
+
+        <div class="test"></div>
+
+
+      <script src="./lib/jquery.js"></script>
+
+      <script>
+        $(document).ready(function(){
+
+          var Material = require('Material');
+
+
+          var testDiv = document.createElement('div');
+          var $testDiv = $(testDiv);
+          var test = new Material($testDiv);
+
+          console.log(test.el.nodeName);
+
+
+        });
+      </script>
+    </body>
+</html>
