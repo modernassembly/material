@@ -6,12 +6,14 @@
         <title>Material Example</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="../css/material.css">
         <script src="../dist/material.js"></script>
+
     </head>
     <body>
 
-        <div class="test"></div>
-
+      <div id="stage"></div>
 
       <script src="./lib/jquery.js"></script>
 
@@ -19,13 +21,13 @@
         $(document).ready(function(){
 
           var Material = require('Material');
+          var Stage = require('Stage');
 
 
-          var testDiv = document.createElement('div');
-          var $testDiv = $(testDiv);
-          var test = new Material($testDiv);
+          var test = new Material();
 
-          console.log(test.el.nodeName);
+          var stage = new Stage($('#stage'));
+          stage.addChild(test);
 
 
         });

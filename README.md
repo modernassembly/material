@@ -14,7 +14,7 @@ And run this command to watch:
 
 `watchify lib/Material.js -r ./lib/Material.js:Material -o dist/material.js`
 
-# Build
+## Build
 
 Make sure to install uglify globally:
 

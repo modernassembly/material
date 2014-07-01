@@ -1,4 +1,6 @@
 require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"VnSPfY":[function(require,module,exports){
+var _ = require('lodash');
+
 var Material = function(el, settings){
   'use strict';
 
@@ -10,38 +12,31 @@ var Material = function(el, settings){
   }
   if(typeof el === 'undefined' || !el){
     el = document.createElement('div');
+    // TODO: add to DOM
+    // http://www.paulirish.com/2011/surefire-dom-element-insertion/
   }
 
   this.el = el;
   this.children = [];
 
-  this.immutableSettings = {
-    'position': 'absolute',
-    'z-index': 0,
-    'top': 0,
-    'left': 0
-  };
-
-  this.settings = {
+  this.css = {
     content: '',
-    x: 0,
-    y: 0,
-    z: 0,
-    width: 0,
-    height: 0,
+    x: null,
+    y: null,
+    z: null,
     scale: {
-      x: 0,
-      y: 0,
-      z: 0
+      x: null,
+      y: null,
+      z: null
     },
     rotate: {
-      x: 0,
-      y: 0,
-      z: 0
+      x: null,
+      y: null,
+      z: null
     },
     skew: {
-      x: 0,
-      y: 0
+      x: null,
+      y: null
     }
   };
   if(_.isObject(settings)){
@@ -57,37 +52,42 @@ Material.prototype.set = function(key, value) {
   }
 };
 
-Material.prototype.addChild = function(el) {
-  var _ = require('lodash');
+
+Material.prototype.addChild = function(newMaterial) {
+  var self = this;
   // make sure user is trying to add a Material
-  if(!this.isMaterial(el)){
+  if(!this.isMaterial(newMaterial)){
     console.error('Only Materials can be added to a Material through addChild()');
     return;
   }
-
   // throw circular reference error if new child contains this material
-  if(el.contains(this)){
+  if(newMaterial.contains(this)){
     console.error('Circular Reference when adding material.');
     return;
   }
-
-  // if already exists, place at top of stack
+  // fetch the material if it already exists
   var removedMats = _.remove(this.children, function(mat){
-    return mat === el;
+    return mat === newMaterial;
   });
   if(removedMats.length > 0){
+    // place already existing materials at the top of the display stack
     this.children = this.children.concat(removedMats);
+    _.each(removedMats, function(mat){
+      if(newMaterial.el.contains(mat.el)) self.el.removeChild(mat.el);
+      self.el.appendChild(mat.el);
+    });
   }else{
-    this.children[this.children.length] = el;
+    console.dir(self.el);
+    console.dir(newMaterial.el);
+    self.el.appendChild(newMaterial.el);
+    this.children[this.children.length] = newMaterial;
   }
-  this.updateCSS();
 };
 
 // removes and destroys passed in material
 Material.prototype.removeChild = function(el) {
   var self = this,
-    log = require('./utils/log'),
-    _ = require('lodash');
+    log = require('./utils/log');
   // make sure user is trying to remove a Material
   if(!this.isMaterial(el)){
     console.error('Only Materials can be removed from a Material through removeChild()');
@@ -108,7 +108,6 @@ Material.prototype.removeChild = function(el) {
       mat.destroy();
     });
   }
-  this.updateCSS();
 };
 
 
@@ -136,20 +135,35 @@ Material.prototype.isMaterial = function(el) {
 };
 
 Material.prototype.contains = function(mat) {
-  var _ = require('lodash');
   return _.indexOf(this.children, mat) >= 0;
 };
 
 module.exports = Material;
-},{"./utils/log":4,"lodash":6}],"Material":[function(require,module,exports){
+},{"./utils/log":6,"lodash":8}],"Material":[function(require,module,exports){
 module.exports=require('VnSPfY');
-},{}],3:[function(require,module,exports){
+},{}],"5lsmLu":[function(require,module,exports){
+var Material = require('Material');
+
+var Stage = function(el, settings){
+  'use strict';
+
+
+  Material.apply(this, el, settings);
+
+};
+
+Stage.prototype = new Material();
+
+module.exports = Stage;
+},{"Material":"VnSPfY"}],"Stage":[function(require,module,exports){
+module.exports=require('5lsmLu');
+},{}],5:[function(require,module,exports){
 module.exports = {
 
   DEBUG: true
 
 };
-},{}],4:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 module.exports = function(val){
 
   require('console-shim');
@@ -161,7 +175,7 @@ module.exports = function(val){
   }
 
 };
-},{"../global":3,"console-shim":5}],5:[function(require,module,exports){
+},{"../global":5,"console-shim":7}],7:[function(require,module,exports){
 /**
  * @preserve console-shim 1.0.3
  * https://github.com/kayahr/console-shim
@@ -376,7 +390,7 @@ if (!console["count"]) console["count"] = function() {};
 
 })();
 
-},{}],6:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 (function (global){
 /**
  * @license
